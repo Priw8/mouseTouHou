@@ -8,6 +8,7 @@ int SLOW_MOUSE_SPEED;
 
 enum GAME_IDS {
     LE01,
+    LE02,
 
     TH06,
     TH07,
@@ -49,6 +50,14 @@ static GAMEDATA games[] = {
 
         // executable name
         L"Le01.exe"
+    },
+    {
+        LE02,
+        0x00ADD1A4, 0x0, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        650.0f, 512.0f,
+        L"Le02.exe"
     },
     {
         TH06,
@@ -313,6 +322,7 @@ int Game::MouseControl()
 
     switch (this->data->num) {
     case LE01:
+    case LE02:
         WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs), &posX, sizeof(DWORD), NULL);
         WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs + 4), &posY, sizeof(DWORD), NULL);
         break;
