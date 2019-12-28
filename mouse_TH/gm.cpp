@@ -1,228 +1,366 @@
-#pragma once
+Ôªø#pragma once
 #include "pch.h"
 #include "gm.h"
 #include "Proc.h"
 
-HANDLE GM_HWND;
-int NW_GAME;
-int PID;
-int ARR_NUM;
-HWND WIND_HWND;
-Game Game::allGm[40];
 int NORMAL_MOUSE_SPEED;
 int SLOW_MOUSE_SPEED;
-void init()
-{
-	bool i= SystemParametersInfo(SPI_GETMOUSESPEED, 0, &NORMAL_MOUSE_SPEED, SPIF_SENDCHANGE);
-	if (!i)
-	{
-		NORMAL_MOUSE_SPEED = -1;
-	}
-	SLOW_MOUSE_SPEED =(int)floor(((float)NORMAL_MOUSE_SPEED*0.4f)+0.5f);//Àƒ…·ŒÂ»Î
-	//¥Ê¥¢ƒ¨»œ Û±ÍÀŸ∂»
-	//						∞Ê±æ∫≈	pt◊‘ª˙		offsX◊¯±Í	pt”Œœ∑ÀŸ∂»			xy◊Ó¥Û◊Ó–°÷µ						¥∞ø⁄√˚
-	Game::allGm[0] = Game(12,		0x004B4514, 0x988,		(float*)0x004B2ED0, 0.065f, 0.125f, 0.635f, 0.93125f, L"th12c.exe");
-	Game::allGm[1] = Game(12,		0x004B4514, 0x988,		(float*)0x004B2ED0, 0.065f, 0.125f, 0.635f, 0.93125f, L"th12.exe");
-	Game::allGm[2] = Game(13,		0x004C22C4, 0x5C4,		(float*)0x004C0A28, 0.065f, 0.125f, 0.635f, 0.93125f, L"th13c.exe");
-	Game::allGm[3] = Game(13,		0x004C22C4, 0x5C4,		(float*)0x004C0A28, 0.065f, 0.125f, 0.635f, 0.93125f, L"th13.exe");
-	Game::allGm[4] = Game(15,		0x004E9BB8, 0x624,		(float*)0x004E73E8, 0.065f, 0.125f, 0.635f, 0.93125f, L"th15.exe");
-	Game::allGm[5] = Game(16,		0x004A6EF8, 0x61C,		(float*)0x004A5788, 0.065f, 0.125f, 0.635f, 0.93125f, L"th16.exe");
-	Game::allGm[6] = Game(14,		0x004DB67C, 0x5EC,		(float*)0x004D8F58, 0.065f, 0.125f, 0.635f, 0.93125f, L"th14.exe");
-	Game::allGm[7] = Game(10,		0x00477834, 0x3CC,		(float*)0x00476F78, 0.065f, 0.125f, 0.635f, 0.93125f, L"th10.exe",				100.0f);
-	Game::allGm[8] = Game(10,		0x00477834, 0x3CC,		(float*)0x00476F78, 0.065f, 0.125f, 0.635f, 0.93125f, L"th10c.exe",				100.0f);
-	Game::allGm[9] = Game(8,		0x017D61AC ,0x0,		(float*)0x017CE8E0, 0.065f, 0.085f, 0.635f, 0.93125f, L"th08.exe",				1.0f, 8.0f,376.0f,16.0f,432.0f);
-	Game::allGm[10] = Game(7,		0x004BE408 ,0x0,		(float*)0x00575AC8, 0.065f, 0.085f, 0.635f, 0.93125f, L"th07.exe",				1.0f, 8.0f,376.0f,16.0f,432.0f);
-	Game::allGm[11] = Game(6,		0x006CAA68 ,0x0,		(float*)0x006C6EC0, 0.065f, 0.085f,	0.635f, 0.93125f, L"ìåï˚çgñÇãΩ.exe",		1.0f, 8.0f,376.0f,16.0f,432.0f);
-	Game::allGm[12] = Game(6,		0x006CAA68 ,0x0,		(float*)0x006C6EC0, 0.065f, 0.085f, 0.635f, 0.93125f, L"th06.exe",				1.0f, 8.0f,376.0f,16.0f,432.0f);
-	Game::allGm[13] = Game(6,		0x006CAA68 ,0x0,		(float*)0x006C6EC0, 0.065f, 0.085f, 0.635f, 0.93125f, L"ñ|∑Ωºtƒß‡_.exe",		1.0f, 8.0f,376.0f,16.0f,432.0f);
-	
-	Game::allGm[14] = Game(11,		-1		   ,0x0,		(float*)0x004A7948, 0.065f, 0.125f, 0.635f, 0.93125f, L"th11.exe");
-	Game::allGm[18] = Game(128,		0x004B8A80, 0xED8,		(float*)0x004B6F58, 0.215f, 0.125f, 0.785f, 0.93125f, L"th128.exe");
-	Game::allGm[19] = Game(125,		0x004B68C8, 0x604,		(float*)0x004B5308, 0.215f, 0.125f, 0.785f, 0.93125f, L"th125.exe");
-	Game::allGm[20] = Game(125,		0x004B68C8, 0x604,		(float*)0x004B5308, 0.215f, 0.125f, 0.785f, 0.93125f, L"th125c.exe");
-	Game::allGm[21] = Game(143,		0x004E6B88, 0x5EC,		(float*)0x004E40B0, 0.215f, 0.125f, 0.785f, 0.93125f, L"th143.exe");
-	Game::allGm[22] = Game(165,		0x004B5654, 0x618,		(float*)0x004B39D0, 0.215f, 0.125f, 0.785f, 0.93125f, L"th165.exe");
-	Game::allGm[23] = Game(95,		0x004C3E34, 0x1E30,		(float*)0x004BCED8, 0.215f, 0.125f, 0.785f, 0.94125f, L"th095.exe",			1.0f,-184.0f,184.0f,32.0f,436.0f);
-	Game::allGm[24] = Game(9,		0x004A7D94, 0x1B88,		(float*)0x004B36B8, 0.04f,	0.125f,	0.46f, 0.94125f, L"th09.exe",			1.0f,-136.0f,136.0f,32.0f,436.0f);
-	
-	Game::allGm[15] = Game(-100,	0x00FE2350,0x0,			(float*)-1		   ,0.065f, 0.125f, 0.635f, 0.93125f, L"thsg.exe",				1.0f,10.0f,374.0f,32.0f,433.0f);
-	//ÀÆæßπ¨
-	Game::allGm[16] = Game(-101,	0x00A8CDF8,0x0,			(float*)-1		   ,0.065f, 0.095f,	0.635f, 0.93125f, L"∂´∑Ω∫£ª›Ã√.exe",		1.0f,8.0f,376.0f,16.0f,432.0f);
-	//∫£ª›Ã√,–Ë“™∏ƒ¥∞ø⁄≈‰÷√“‘ªÒµ√◊Óº—”Œœ∑ÃÂ—È
-	Game::allGm[17] = Game(-102,	0x017D2EA0,0x0,			(float*)-1		   ,0.19f,  0.03f,	0.81f, 0.99f, L"QP Shooting.exe",		1.0f,-250.0f,250.0f,-300.0f,300.0f);
-	//QP shooting(¥∞ø⁄¥Û–°1280*960)
+
+enum GAME_IDS {
+    LE01,
+
+    TH06,
+    TH07,
+    TH08,
+    TH09,
+    TH95,
+    TH10,
+    TH11,
+    TH12,
+    TH125,
+    TH128,
+    TH13,
+    TH14,
+    TH143,
+    TH15,
+    TH16,
+    TH165,
+    TH17
+};
+
+static GAMEDATA games[] = {
+    // TODO: pause detection pointers
+    {
+        // unique ID
+        LE01, 
+
+        // location of player structure pointer in virtual memory (or in some cases an absolute ptr to player struct), offset of player coordinates from the beginning of player structure,
+        // and a pointer to a variable in virtual memory that says whether the game is paused or not
+        0x00AE693C, 0x0, -1, 
+
+        // min/max player positions
+        0.0f, 0.0f, 384.0f, 448.0f,
+       
+        // distance of the STG frame from window top left corner, STG frame width and height
+        32.0f, 16.0f, 384.0f, 448.0f, 
+
+        // expected window width and height
+        650.0f, 512.0f, 
+
+        // executable name
+        L"Le01.exe"
+    },
+    {
+        TH06,
+        0x002CAA68, 0x0, -1,
+        8.0f, 16.0f, 376.0f, 432.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"Êù±ÊñπÁ¥ÖÈ≠îÈÉ∑.exe"
+    },
+    {
+        TH06,
+        0x002CAA68, 0x0, -1,
+        8.0f, 16.0f, 376.0f, 432.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th06.exe"
+    },
+    {
+        TH07,
+        0x000BE408, 0x0, -1,
+        8.0f, 16.0f, 376.0f, 432.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th07.exe"
+    },
+    {
+        TH08,
+        0x013D61AC, 0x0, 0x124D0A0,
+        8.0f, 16.0f, 376.0f, 432.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th08.exe"
+    },
+    {
+        TH09,
+        0x000A7D94, 0x1B88, -1,
+        0.0f, 16.0f, 272.0f, 432.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th09.exe"
+    },
+    {
+        TH95,
+        0x000C4E70, 0x1E30, -1,
+        8.0f, 16.0f, 376.0f, 432.0f,
+        128.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th095.exe"
+    },
+    // TODO: max coordinates for th10+
+    {
+        TH10,
+        0x00077834, 0x3CC, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th10.exe"
+    },
+    {
+        TH11,
+        0x000A8EB4, 0x888, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th11.exe"
+    },
+    {
+        TH12,
+        0x000B4514, 0x988, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th12.exe"
+    },
+    {
+        TH125,
+        0x000B68C8, 0x604, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        128.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th125.exe"
+    },
+    {
+        TH128,
+        0x000B8A80, 0xED8, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        128.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th128.exe"
+    },
+    {
+        TH13,
+        0x000C22C4, 0x5C4, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th13.exe"
+    },
+    {
+        TH14,
+        0x000DB67C, 0x5EC, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th14.exe"
+    },
+    {
+        TH143,
+        0x000E6B88, 0x5EC, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        128.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th143.exe"
+    },
+    {
+        TH15,
+        0x000E9BB8, 0x624, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th15.exe"
+    },
+    {
+        TH16,
+        0x000A6EF8, 0x61C, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th16.exe"
+    },
+    {
+        TH165,
+        0x000B5654, 0x618, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        128.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th165.exe"
+    },
+    {
+        TH17,
+        0x000B77D0, 0x61C, -1,
+        0.0f, 0.0f, 384.0f, 448.0f,
+        32.0f, 16.0f, 384.0f, 448.0f,
+        646.0f, 508.0f,
+        L"th17.exe"
+    },
+};
+
+void init() {
+    if (
+        !SystemParametersInfo(SPI_GETMOUSESPEED, 0, &NORMAL_MOUSE_SPEED, SPIF_SENDCHANGE)
+    ) {
+        NORMAL_MOUSE_SPEED = -1;
+    }
+
+    SLOW_MOUSE_SPEED = (int)floor(((float)NORMAL_MOUSE_SPEED * 0.4f) + 0.5f); // speed during focused movement
 }
 
-void GetGame(HANDLE &gmHwnd, int &GmNum,int& pid,int &ArrNum)
-{
-	for (int i = 0; i < 40; i++)
-	{
-		if (Game::allGm[i].num == -1)continue;
-		pid=FindProcessPid(Game::allGm[i].wdName);
-		if (pid == NULL)continue;
-		GmNum = Game::allGm[i].num;
-		ArrNum = i;
-		break;
-	}
-	if ((gmHwnd=OpenProcess(PROCESS_ALL_ACCESS, false, pid)) == NULL)
-	{
-		MessageBox(NULL, L"ªÒ»°Ω¯≥Ãæ‰±˙ ß∞‹,«Î»∑»œ”–Œﬁ¥Úø™”Œœ∑", L"Error", MB_OK);
-	}
-	WIND_HWND = ReturnWnd(pid);
-}
-BYTE th11Chg1[12] = { 0xE9,0xD6,0xA6,0x05,0x00,0x90,0x90,0x90,0x90,0x90,0x90,0x90 };
-BYTE th11Chg2[28] = { 0x8B,0x35,0x34,0xAE,0x48,0x00,0xA1,0x38,0xAE,0x48,0x00,0x89,0xB5,0x88,0x08,0x00,0x00,0x89,0x85,0x8C,0x08,0x00,0x00,0xE9,0x15,0x59,0xFA,0xFF };
+Game* GetGame() {
+    bool found = false;
+    int i, pid;
+    for (i = 0; i < (sizeof(games) / sizeof(GAMEDATA)); i++) {
 
-void init2()
-{
-	switch (NW_GAME)
-	{
-	case 11:
-	{
-		DWORD oldProtect, oldProtect2;
-		VirtualProtect((LPVOID)0x0043073A, 0x20, PAGE_EXECUTE_READWRITE, &oldProtect);
-		WriteProcessMemory(GM_HWND, (LPVOID)0x0043073A, th11Chg1, sizeof(th11Chg1), NULL);
-		VirtualProtect((LPVOID)0x0043073A, 0x20, oldProtect, &oldProtect2);
+        pid = FindProcessPid(games[i].wdName);
 
-		VirtualProtect((LPVOID)0x0048AE15, 0x20, PAGE_EXECUTE_READWRITE, &oldProtect);
-		WriteProcessMemory(GM_HWND, (LPVOID)0x0048AE15, th11Chg2, sizeof(th11Chg2), NULL);
-	}
-	break;
-	default:
-		break;
-	}
+        if (pid == 0)
+            continue;
+
+        found = true;
+        break;
+    }
+
+    HANDLE hwnd;
+    if (!found) {
+        MessageBox(NULL, L"Couldn't find any supported games. Launch the game before running this program.", L"Error", MB_OK);
+        return NULL;
+    } else if ((hwnd = OpenProcess(PROCESS_ALL_ACCESS, false, pid)) == NULL) {
+        MessageBox(NULL, L"Couldn't access the game process.", L"Error", MB_OK);
+        return NULL;
+    }
+
+    return new Game(&games[i], pid, hwnd);
 }
 
 DWORD Game::isInGm()
 {
-	DWORD ptPl=NULL;
-	switch (this->num)
-	{
-	case 9:
-	case 95:
-	case 10:
-	case 12:
-	case 125:
-	case 128:
-	case 13:
-	case 14:
-	case 143:
-	case 15:
-	case 16:
-	case 165:
-		ReadProcessMemory(GM_HWND, (LPCVOID)this->ptPlBasic, &ptPl, sizeof(DWORD), NULL);
-		break;
-	case -102:
-	case -101:
-	case -100:
-	case 11:
-	case 8:
-	case 7:
-	case 6:
-		ptPl = -1;
-		break;
-	default:
-		ReadProcessMemory(GM_HWND, (LPCVOID)this->ptPlBasic, &ptPl, sizeof(DWORD), NULL);
-		break;
-	}
-	return ptPl;
+    DWORD ptPl = NULL;
+    switch (this->data->num) {
+    case TH06:
+    case TH07:
+    case TH08:
+        ptPl = -1;
+        break;
+    default:
+        ReadProcessMemory(this->handle, (LPCVOID)(this->data->ptPlBasic + this->base), &ptPl, sizeof(DWORD), NULL);
+    }
+    return ptPl;
 }
 
-bool Game::isPause()
-{
-	float spd;
-	if (this->ptRunSpd == (float*)-1)return 0;
-	ReadProcessMemory(GM_HWND, (LPCVOID)this->ptRunSpd, &spd, sizeof(DWORD), NULL);
-	if (spd == 0.0f)
-		return 1;
-	return 0;
+bool Game::isPause() {
+    DWORD pause = 0;
+
+    switch (this->data->num) {
+    default:
+        ReadProcessMemory(this->handle, (LPCVOID)(this->data->ptPause + this->base), &pause, 1, NULL);
+        break;
+    }
+
+    return pause;
+}
+
+DWORD Game::GetBase() {
+    HMODULE modules[32];
+    DWORD needed;
+    if (EnumProcessModulesEx(this->handle, modules, sizeof(modules), &needed, LIST_MODULES_ALL)) {
+        DWORD len = needed / sizeof(HMODULE);
+        for (DWORD i = 0; i < len; ++i) {
+            WCHAR name[MAX_PATH];
+            GetModuleFileNameEx(this->handle, modules[i], name, MAX_PATH);
+            if (FindStringOrdinal(FIND_FROMSTART, name, -1, this->data->wdName, -1, false)) {
+                MODULEINFO info;
+                GetModuleInformation(this->handle, modules[i], &info, sizeof(info));
+                return (DWORD)info.lpBaseOfDll;
+            }
+        }
+        return NULL;
+    } else {
+        MessageBoxW(NULL, L"Module enumeration failed", L"ERROR", MB_OK);
+        exit(1);
+    }
 }
 
 int Game::MouseControl()
 {
-	DWORD ptPl = this->isInGm();
-	if (ptPl == NULL)
-		return NOT_IN_GAME_FLAG;
-	if (this->isPause())
-		return PAUSE_FLAG;
-	RECT windRect;
-	POINT mousePos;
-	GetCursorPos(&mousePos);//ªÒ»° Û±Í◊¯±Í
-	GetWindowRect(WIND_HWND, &windRect);//ªÒ»°¥∞ø⁄◊¯±Í 
-	float relX,relY;
-	relX = (float)(mousePos.x - windRect.left) / (float)(windRect.right - windRect.left);
-	relY = (float)(mousePos.y - windRect.top) / (float)(windRect.bottom - windRect.top);
-	if (relX < this->xmin)relX = this->xmin;
-	if (relX > this->xmax)relX = this->xmax;
-	if (relY < this->ymin)relY = this->ymin;
-	if (relY > this->ymax)relY = this->ymax;
-	relX = (relX - this->xmin) / xsz;
-	relY = (relY - this->ymin) / ysz;
+    DWORD ptPl = this->isInGm();
 
-	switch (this->num)
-	{
-	case 9:
-	case 95:
-	{
-		float finalX, finalY;
-		finalX = (this->StageXMin + relX * StageXSz) * ratio;
-		finalY = (this->StageYMin + relY * StageYSz) * ratio;
-		WriteProcessMemory(GM_HWND, (LPVOID)(ptPl + this->ptPloffs), &finalX, sizeof(DWORD), NULL);
-		WriteProcessMemory(GM_HWND, (LPVOID)(ptPl + this->ptPloffs+4), &finalY, sizeof(DWORD), NULL);
-	}
-	break;
-	case -100:
-	case -101:
-	{
-		double finalXd, finalYd;
-		finalXd = (this->StageXMin + relX * StageXSz) * ratio;
-		finalYd = (this->StageYMin + relY * StageYSz) * ratio;
-		WriteProcessMemory(GM_HWND, (LPVOID)this->ptPlBasic, &finalXd, sizeof(QWORD), NULL);
-		WriteProcessMemory(GM_HWND, (LPVOID)(this->ptPlBasic + 8), &finalYd, sizeof(QWORD), NULL);
-	}
-	break;
-	case 11:
-	{
-		int finalX, finalY;
-		finalX = (int)(this->StageXMin + relX * StageXSz) * ratio;
-		finalY = (int)(this->StageYMin + relY * StageYSz) * ratio;
-		WriteProcessMemory(GM_HWND, (LPVOID)0x0048AE34, &finalX, sizeof(DWORD), NULL);
-		WriteProcessMemory(GM_HWND, (LPVOID)0x0048AE38, &finalY, sizeof(DWORD), NULL);
-	}
-		break;
-	case 10:
-	case 12:
-	case 125:
-	case 128:
-	case 13:
-	case 14:
-	case 143:
-	case 15:
-	case 16:
-	case 165:
-	{
-		int finalX, finalY;
-		finalX = (int)(this->StageXMin + relX * StageXSz) * ratio;
-		finalY = (int)(this->StageYMin + relY * StageYSz) * ratio;
-		WriteProcessMemory(GM_HWND, (LPVOID)(ptPl + this->ptPloffs), &finalX, sizeof(DWORD), NULL);
-		WriteProcessMemory(GM_HWND, (LPVOID)(ptPl + this->ptPloffs + 4), &finalY, sizeof(DWORD), NULL);
-	}
-		break;
-	case -102:
-	case 8:
-	case 7:
-	case 6:
-	{
-		float fFx, fFy;
-		fFx = (this->StageXMin + relX * StageXSz);
-		fFy = (this->StageYMin + relY * StageYSz);
-		WriteProcessMemory(GM_HWND, (LPVOID)this->ptPlBasic, &fFx, sizeof(DWORD), NULL);
-		WriteProcessMemory(GM_HWND, (LPVOID)(this->ptPlBasic + 4), &fFy, sizeof(DWORD), NULL);
-	}
-		break;
-	default:
-		break;
-	}
+    if (ptPl == NULL)
+        return NOT_IN_GAME_FLAG;
 
-	return NORMAL_FLAG;
+    if (this->isPause())
+        return PAUSE_FLAG;
+
+    RECT windRect;
+    POINT mousePos;
+    GetCursorPos(&mousePos); 
+    GetWindowRect(this->wnd, &windRect);
+
+    // Should generally be 1, unless the game window is resized
+    float ratioX = (windRect.right - windRect.left) / this->data->wndX;
+    float ratioY = (windRect.bottom - windRect.top) / this->data->wndY;
+
+    float posX = (float)(mousePos.x - (windRect.left + this->data->frameOffX*ratioX));
+    float posY = (float)(mousePos.y - (windRect.top + this->data->frameOffY*ratioY));
+
+    posX = posX / ratioX;
+    posY = posY / ratioY;
+
+    if (posX < this->data->xmin) posX = this->data->xmin;
+    if (posX > this->data->xmax) posX = this->data->xmax;
+    if (posY < this->data->ymin) posY = this->data->ymin;
+    if (posY > this->data->ymax) posY = this->data->ymax;
+
+    switch (this->data->num) {
+    case LE01:
+        WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs), &posX, sizeof(DWORD), NULL);
+        WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs + 4), &posY, sizeof(DWORD), NULL);
+        break;
+    case TH06:
+    case TH07:
+    case TH08:
+        WriteProcessMemory(this->handle, (LPVOID)(this->data->ptPlBasic + this->base + this->data->ptPloffs), &posX, sizeof(DWORD), NULL);
+        WriteProcessMemory(this->handle, (LPVOID)(this->data->ptPlBasic + this->base + this->data->ptPloffs + 4), &posY, sizeof(DWORD), NULL);
+        break;
+    case TH09: {
+        posX -= 136.0f;
+        WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs), &posX, sizeof(DWORD), NULL);
+        WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs + 4), &posY, sizeof(DWORD), NULL);
+        break;
+    }
+    case TH95: {
+        posX -= 192.0f;
+        WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs), &posX, sizeof(DWORD), NULL);
+        WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs + 4), &posY, sizeof(DWORD), NULL);
+        break;
+    }
+    case TH10:
+    {
+        int iPosX = (int)((posX - 192.0f) * 100.0f);
+        int iPosY = (int)(posY * 100.0f);
+        WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs), &iPosX, sizeof(DWORD), NULL);
+        WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs + 4), &iPosY, sizeof(DWORD), NULL);
+        break;
+    }
+    case TH11:
+    case TH12:
+    case TH125:
+    case TH128:
+    case TH13:
+    case TH14:
+    case TH143:
+    case TH15:
+    case TH16:
+    case TH165:
+    case TH17:
+    {
+        int iPosX = (int)((posX - 192.0f) * 128.0f);
+        int iPosY = (int)(posY * 128.0f);
+        WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs), &iPosX, sizeof(DWORD), NULL);
+        WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs + 4), &iPosY, sizeof(DWORD), NULL);
+        break;
+    }
+    }
+
+    return NORMAL_FLAG;
 }

@@ -1,19 +1,18 @@
 #include "pch.h"
 #include "Proc.h"
 
-typedef struct EnumFunArg
-{
-	HWND      hWnd;
-	DWORD    dwProcessId;
-}EnumFunArg, *LPEnumFunArg;
-BOOL CALLBACK lpEnumFunc(HWND hwnd, LPARAM lParam)
-{
+typedef struct EnumFunArg {
+	HWND hWnd;
+	DWORD dwProcessId;
+} EnumFunArg, *LPEnumFunArg;
 
-	EnumFunArg  *pArg = (LPEnumFunArg)lParam;
-	DWORD  processId;
+static BOOL CALLBACK lpEnumFunc(HWND hwnd, LPARAM lParam) {
+
+	EnumFunArg *pArg = (LPEnumFunArg)lParam;
+	DWORD processId;
 	GetWindowThreadProcessId(hwnd, &processId);
-	if (processId == pArg->dwProcessId)
-	{
+
+	if (processId == pArg->dwProcessId) {
 		DWORD style = (DWORD)GetWindowLong(hwnd, GWL_STYLE);
 		if (style & WS_VISIBLE) {
 			pArg->hWnd = hwnd;
@@ -22,16 +21,18 @@ BOOL CALLBACK lpEnumFunc(HWND hwnd, LPARAM lParam)
 	}
 	return TRUE;
 }
-HWND ReturnWnd(DWORD processID)
-{
+HWND ReturnWnd(DWORD processID) {
 	HWND retWnd = NULL;
 	EnumFunArg wi;
 	wi.dwProcessId = processID;
 	wi.hWnd = NULL;
+
 	EnumWindows(lpEnumFunc, (LPARAM)&wi);
 	if (wi.hWnd) {
 		retWnd = wi.hWnd;
-	}   return retWnd;
+	}
+
+	return retWnd;
 }
 
 int FindProcessPid(const WCHAR * pszProcessName)
@@ -42,13 +43,12 @@ int FindProcessPid(const WCHAR * pszProcessName)
 	pInfo.dwSize = sizeof(pInfo);
 
 	Process32First(hSnapShot, &pInfo);
-	do
-	{
-		if (_tcscmp(_tcsdup(pInfo.szExeFile), pszProcessName) == 0)
-		{
+	do {
+		if (_tcscmp(_tcsdup(pInfo.szExeFile), pszProcessName) == 0) {
 			id = pInfo.th32ProcessID;
 			break;
 		}
 	} while (Process32Next(hSnapShot, &pInfo) != FALSE);
+
 	return id;
 }
