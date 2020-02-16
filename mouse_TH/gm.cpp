@@ -362,10 +362,17 @@ int Game::MouseControl()
     case TH15:
     case TH16:
     case TH165:
+	{
+		int iPosX = (int)((posX - 192.0f) * 128.0f);
+		int iPosY = (int)(posY * 128.0f);
+		WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs), &iPosX, sizeof(DWORD), NULL);
+		WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs + 4), &iPosY, sizeof(DWORD), NULL);
+		break;
+	}
     case TH17:
     {
-        int iPosX = (int)((posX - 192.0f) * 128.0f);
-        int iPosY = (int)(posY * 128.0f);
+        int iPosX = (int)((posX - 195.5f) * 128.0f);
+        int iPosY = (int)((posY - 21.5f) * 128.0f);
         WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs), &iPosX, sizeof(DWORD), NULL);
         WriteProcessMemory(this->handle, (LPVOID)(ptPl + this->data->ptPloffs + 4), &iPosY, sizeof(DWORD), NULL);
         break;
